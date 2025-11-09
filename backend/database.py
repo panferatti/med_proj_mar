@@ -4,7 +4,7 @@ def init_database():
     # Проверяем, не заполнена ли уже база
     if BodyPart.query.count() == 0:
         # Создаем иерархию анатомии
-        body = BodyPart(name="Тело", level=0)
+        body = BodyPart(name="Назад", level=0)
 
         # Уровень 1: Основные регионы
         head = BodyPart(name="Голова", parent=body, level=1)
