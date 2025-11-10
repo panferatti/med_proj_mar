@@ -2,11 +2,21 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Медицинская визуализация</title>
     <link rel="stylesheet" href="css/garden.css">
     <style>
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --secondary-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --success-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --shadow-soft: 0 8px 32px rgba(0, 0, 0, 0.1);
+            --shadow-medium: 0 15px 35px rgba(0, 0, 0, 0.15);
+            --shadow-strong: 0 20px 50px rgba(0, 0, 0, 0.2);
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -18,6 +28,29 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        body.dark-theme {
+            --primary-gradient: linear-gradient(135deg, #8e2de2 0%, #4a00e0 100%);
+            --glass-bg: rgba(0, 0, 0, 0.3);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            background: linear-gradient(135deg, #0c0c0c 0%, #2d2d2d 100%);
+        }
+
+        .parallax-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            z-index: -1;
+            transition: all 0.3s ease;
+        }
+
+        .dark-theme .parallax-bg {
+            background: linear-gradient(135deg, #0c0c0c 0%, #2d2d2d 100%);
         }
 
         .app-container {
@@ -35,13 +68,14 @@
         /* Header */
         .header {
             grid-area: header;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--glass-border);
             display: flex;
             align-items: center;
             padding: 0 2rem;
             color: white;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
         }
 
         .header h1 {
@@ -49,60 +83,133 @@
             font-size: 1.5rem;
         }
 
+        .header-actions {
+            margin-left: auto;
+            display: flex;
+            gap: 0.5rem;
+        }
+
         /* Sidebar */
         .sidebar {
             grid-area: sidebar;
             background: rgba(255, 255, 255, 0.95);
-            border-right: 1px solid #e0e0e0;
+            backdrop-filter: blur(20px);
+            border-right: 1px solid rgba(255, 255, 255, 0.3);
             padding: 1.5rem;
             overflow-y: auto;
+            box-shadow: 5px 0 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .dark-theme .sidebar {
+            background: rgba(30, 30, 30, 0.95);
+            color: white;
         }
 
         .breadcrumb {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow-soft);
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            margin-bottom: 1.5rem;
             font-size: 0.9rem;
-            color: #666;
         }
 
-        .breadcrumb span {
+        .dark-theme .breadcrumb {
+            background: rgba(50, 50, 50, 0.8);
+            color: white;
+        }
+
+        .breadcrumb .crumb {
+            position: relative;
+            padding: 0.5rem 1rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
             cursor: pointer;
-            transition: color 0.3s ease;
         }
 
-        .breadcrumb span:hover {
+        .breadcrumb .crumb:hover {
+            background: rgba(102, 126, 234, 0.1);
             color: #667eea;
         }
 
+        .breadcrumb .crumb.active {
+            background: var(--primary-gradient);
+            color: white;
+            box-shadow: var(--shadow-soft);
+        }
+
         .breadcrumb .separator {
+            margin: 0 0.5rem;
             color: #ccc;
         }
 
         .anatomy-grid {
             display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.75rem;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 1rem;
         }
 
         .body-part {
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 1rem;
+            position: relative;
+            background: rgba(255, 255, 255, 0.95);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 20px;
+            padding: 1.5rem 1rem;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
             text-align: center;
-            font-weight: 500;
+            font-weight: 600;
             color: #333;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+            overflow: hidden;
+        }
+
+        .dark-theme .body-part {
+            background: rgba(50, 50, 50, 0.95);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .body-part::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--primary-gradient);
+            transform: scaleX(0);
+            transition: transform 0.4s ease;
         }
 
         .body-part:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-            border-color: #667eea;
+            transform: translateY(-8px) scale(1.05);
+            box-shadow: var(--shadow-strong);
             color: #667eea;
+        }
+
+        .dark-theme .body-part:hover {
+            color: #8e2de2;
+        }
+
+        .body-part:hover::before {
+            transform: scaleX(1);
+        }
+
+        .body-part-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.75rem;
+            display: block;
+            transition: transform 0.4s ease;
+        }
+
+        .body-part:hover .body-part-icon {
+            transform: scale(1.2) rotate(5deg);
         }
 
         /* Main Content */
@@ -117,19 +224,32 @@
 
         .visualization-area {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 20px;
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
             padding: 2rem;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            box-shadow: var(--shadow-soft);
             max-width: 600px;
             width: 100%;
             text-align: center;
+            position: relative;
+            overflow: hidden;
         }
 
-        .body-image {
-            max-width: 100%;
-            height: auto;
-            border-radius: 12px;
-            margin-bottom: 1rem;
+        .dark-theme .visualization-area {
+            background: rgba(30, 30, 30, 0.95);
+            color: white;
+        }
+
+        .visualization-area::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            animation: rotate 10s linear infinite;
+            pointer-events: none;
         }
 
         .current-part {
@@ -137,6 +257,29 @@
             font-weight: 300;
             color: #333;
             margin-bottom: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .dark-theme .current-part {
+            color: white;
+        }
+
+        .body-image {
+            max-width: 100%;
+            max-height: 400px;
+            height: auto;
+            border-radius: 16px;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow-medium);
+            transition: all 0.5s ease;
+            position: relative;
+            z-index: 2;
+        }
+
+        .body-image:hover {
+            transform: scale(1.02);
+            box-shadow: var(--shadow-strong);
         }
 
         .action-buttons {
@@ -144,19 +287,141 @@
             gap: 1rem;
             justify-content: center;
             margin-top: 1.5rem;
+            position: relative;
+            z-index: 2;
         }
 
         /* Footer */
         .footer {
             grid-area: footer;
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-size: 0.9rem;
+        }
+
+        /* Кнопки */
+        .btn {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 16px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            text-decoration: none;
+            text-align: center;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+            box-shadow: var(--shadow-soft);
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn-secondary {
+            background: var(--secondary-gradient);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn-success {
+            background: var(--success-gradient);
+            color: white;
+        }
+
+        .btn-success:hover {
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn-glass {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            color: white;
+            box-shadow: var(--shadow-soft);
+        }
+
+        .btn-glass:hover {
+            background: rgba(255, 255, 255, 0.15);
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-medium);
+        }
+
+        .btn-icon {
+            width: 48px;
+            height: 48px;
+            padding: 0;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Floating Action Button */
+        .fab {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            box-shadow: var(--shadow-strong);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 1000;
+        }
+
+        .fab:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 25px 50px rgba(102, 126, 234, 0.4);
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
         }
 
         /* Modal */
@@ -179,19 +444,28 @@
         }
 
         .modal-content {
-            background: white;
-            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 24px;
             padding: 2rem;
             max-width: 500px;
             width: 90%;
             max-height: 80vh;
             overflow-y: auto;
             box-shadow: 0 25px 50px rgba(0,0,0,0.25);
+            animation: modalAppear 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        .dark-theme .modal-content {
+            background: rgba(30, 30, 30, 0.95);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.1);
         }
 
         .modal-header {
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             align-items: center;
             margin-bottom: 1.5rem;
         }
@@ -201,18 +475,27 @@
             font-weight: 500;
         }
 
+        .dark-theme .modal-header h3 {
+            color: white;
+        }
+
         .close-modal {
-            background: none;
+            background: rgba(0, 0, 0, 0.1);
             border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #666;
-            padding: 0;
-            width: 30px;
-            height: 30px;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
             display: flex;
             align-items: center;
             justify-content: center;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background: rgba(0, 0, 0, 0.2);
+            transform: rotate(90deg);
         }
 
         .notes-list {
@@ -222,16 +505,46 @@
         }
 
         .note-item {
-            background: #f8f9fa;
-            border-radius: 8px;
-            padding: 1rem;
-            margin-bottom: 0.75rem;
-            border-left: 4px solid #667eea;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 6px solid #667eea;
+            box-shadow: var(--shadow-soft);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .dark-theme .note-item {
+            background: rgba(50, 50, 50, 0.8);
+            color: white;
+        }
+
+        .note-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(102, 126, 234, 0.1), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .note-item:hover::before {
+            left: 100%;
+        }
+
+        .note-item:hover {
+            transform: translateX(8px);
+            box-shadow: var(--shadow-medium);
         }
 
         .note-header {
             display: flex;
-            justify-content: between;
+            justify-content: space-between;
             margin-bottom: 0.5rem;
         }
 
@@ -240,14 +553,26 @@
             color: #333;
         }
 
+        .dark-theme .note-doctor {
+            color: white;
+        }
+
         .note-date {
             color: #666;
             font-size: 0.85rem;
         }
 
+        .dark-theme .note-date {
+            color: #ccc;
+        }
+
         .note-content {
             color: #555;
             line-height: 1.4;
+        }
+
+        .dark-theme .note-content {
+            color: #ddd;
         }
 
         .form-group {
@@ -261,6 +586,10 @@
             font-weight: 500;
         }
 
+        .dark-theme .form-group label {
+            color: white;
+        }
+
         .form-control {
             width: 100%;
             padding: 0.75rem;
@@ -268,40 +597,18 @@
             border-radius: 8px;
             font-size: 1rem;
             transition: border-color 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        .dark-theme .form-control {
+            background: rgba(50, 50, 50, 0.9);
+            border: 1px solid #555;
+            color: white;
         }
 
         .form-control:focus {
             outline: none;
             border-color: #667eea;
-        }
-
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-weight: 500;
-        }
-
-        .btn-primary {
-            background: #667eea;
-            color: white;
-        }
-
-        .btn-primary:hover {
-            background: #5a6fd8;
-            transform: translateY(-1px);
-        }
-
-        .btn-secondary {
-            background: #6c757d;
-            color: white;
-        }
-
-        .btn-secondary:hover {
-            background: #5a6268;
         }
 
         /* Empty state */
@@ -310,17 +617,115 @@
             color: #666;
             padding: 2rem;
         }
+
+        .dark-theme .empty-state {
+            color: #ccc;
+        }
+
+        /* Анимации */
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes modalAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.8) translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .fade-in-up {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        /* Адаптивность */
+        @media (max-width: 768px) {
+            .app-container {
+                grid-template-rows: 70px 1fr 50px;
+                grid-template-columns: 1fr;
+                grid-template-areas:
+                    "header"
+                    "main"
+                    "footer";
+            }
+
+            .sidebar {
+                display: none;
+            }
+
+            .body-image {
+                max-height: 300px;
+            }
+
+            .visualization-area {
+                padding: 1rem;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+
+            .btn {
+                width: 100%;
+            }
+
+            .anatomy-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 0.75rem;
+            }
+
+            .body-part {
+                padding: 1rem 0.5rem;
+            }
+
+            .body-part-icon {
+                font-size: 2rem;
+            }
+        }
     </style>
 </head>
 <body>
+<div class="parallax-bg"></div>
+
 <div class="app-container">
     <header class="header">
         <h1>🔬 Медицинская визуализация</h1>
+        <div class="header-actions">
+            <button class="btn btn-glass btn-icon" onclick="toggleTheme()" title="Сменить тему">🌙</button>
+            <button class="btn btn-glass btn-icon" onclick="showHelp()" title="Помощь">❓</button>
+        </div>
     </header>
 
     <aside class="sidebar">
         <div class="breadcrumb" id="breadcrumb">
-            <span class="crumb" data-id="1">Назад</span>
+            <span class="crumb active" data-id="1">🏠 Тело</span>
         </div>
         <div class="anatomy-grid" id="anatomy-grid">
             <!-- Динамически заполняется -->
@@ -332,26 +737,42 @@
             <h2 class="current-part" id="current-part">Выберите область тела</h2>
             <div id="body-visualization">
                 <div class="empty-state">
+                    <div style="font-size: 4rem; margin-bottom: 1rem;">👨‍⚕️</div>
                     <p>Выберите часть тела из меню слева для просмотра</p>
                 </div>
             </div>
             <div class="action-buttons">
-                <button class="btn btn-primary" onclick="openNotesModal()">Просмотреть записи</button>
-                <button class="btn btn-secondary" onclick="openAddNoteModal()">Добавить запись</button>
+                <button class="btn btn-primary" onclick="openNotesModal()">
+                    <span>📋</span>
+                    Просмотреть записи
+                </button>
+                <button class="btn btn-secondary" onclick="openAddNoteModal()">
+                    <span>✏️</span>
+                    Добавить запись
+                </button>
+                <button class="btn btn-success" onclick="resetNavigation()">
+                    <span>🔄</span>
+                    Сбросить навигацию
+                </button>
             </div>
         </div>
     </main>
 
     <footer class="footer">
-        <p>Марик лох</p>
+        <p>Медицинская система визуализации © 2024</p>
     </footer>
 </div>
+
+<!-- Floating Action Button -->
+<button class="fab pulse" onclick="quickActions()" title="Быстрые действия">
+    <span>⚡</span>
+</button>
 
 <!-- Модальное окно просмотра записей -->
 <div class="modal" id="notesModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>Медицинские записи</h3>
+            <h3>📋 Медицинские записи</h3>
             <button class="close-modal" onclick="closeNotesModal()">×</button>
         </div>
         <div class="notes-list" id="notesList">
@@ -364,19 +785,22 @@
 <div class="modal" id="addNoteModal">
     <div class="modal-content">
         <div class="modal-header">
-            <h3>Добавить медицинскую запись</h3>
+            <h3>✏️ Добавить медицинскую запись</h3>
             <button class="close-modal" onclick="closeAddNoteModal()">×</button>
         </div>
         <form id="noteForm">
             <div class="form-group">
-                <label for="doctorName">Имя врача</label>
+                <label for="doctorName">👨‍⚕️ Имя врача</label>
                 <input type="text" id="doctorName" class="form-control" required>
             </div>
             <div class="form-group">
-                <label for="noteContent">Запись</label>
+                <label for="noteContent">📝 Запись</label>
                 <textarea id="noteContent" class="form-control" rows="4" required></textarea>
             </div>
-            <button type="submit" class="btn btn-primary">Сохранить запись</button>
+            <button type="submit" class="btn btn-primary" style="width: 100%;">
+                <span>💾</span>
+                Сохранить запись
+            </button>
         </form>
     </div>
 </div>
