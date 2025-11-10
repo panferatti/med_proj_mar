@@ -717,6 +717,17 @@
 <div class="app-container">
     <header class="header">
         <h1>🔬 Медицинская визуализация</h1>
+        <div class="nav-controls">
+            <button class="nav-button" id="backButton" title="Назад" disabled>
+                <span>←</span>
+            </button>
+            <button class="nav-button" id="forwardButton" title="Вперед" disabled>
+                <span>→</span>
+            </button>
+            <button class="nav-button" id="homeButton" title="На главную">
+                <span>🏠</span>
+            </button>
+        </div>
         <div class="header-actions">
             <button class="btn btn-glass btn-icon" onclick="toggleTheme()" title="Сменить тему">🌙</button>
             <button class="btn btn-glass btn-icon" onclick="showHelp()" title="Помощь">❓</button>
@@ -727,13 +738,38 @@
         <div class="breadcrumb" id="breadcrumb">
             <span class="crumb active" data-id="1">🏠 Тело</span>
         </div>
+        <div class="search-container">
+            <div class="search-icon">🔍</div>
+            <input type="text" class="search-input" id="searchInput" placeholder="Поиск частей тела...">
+            <div class="search-results" id="searchResults" style="display: none;"></div>
+        </div>
+
+        <!-- БЛОК БЫСТРАЯ НАВИГАЦИЯ;  <div class="quick-actions-grid">
+            <div class="quick-action" onclick="navigateToPart(2)">🧠 Голова</div>
+            <div class="quick-action" onclick="navigateToPart(3)">👤 Туловище</div>
+            <div class="quick-action" onclick="navigateToPart(4)">💪 Руки</div>
+            <div class="quick-action" onclick="navigateToPart(5)">🦵 Ноги</div>
+        </div>-->
         <div class="anatomy-grid" id="anatomy-grid">
             <!-- Динамически заполняется -->
         </div>
+        <!-- История поиска: <div class="history-panel">
+            <div class="history-title">
+                <span>История просмотров</span>
+                <button class="btn btn-glass btn-icon" onclick="clearHistory()" title="Очистить историю" style="width: 24px; height: 24px; font-size: 0.8rem;">🗑️</button>
+            </div>
+            <div class="history-list" id="historyList"></div>
+        </div>-->
     </aside>
 
     <main class="main-content">
+
         <div class="visualization-area">
+            <div class="zoom-controls">
+                <button class="zoom-button" onclick="zoomIn()" title="Увеличить">+</button>
+                <button class="zoom-button" onclick="zoomOut()" title="Уменьшить">-</button>
+                <button class="zoom-button" onclick="resetZoom()" title="Сбросить масштаб">↺</button>
+            </div>
             <h2 class="current-part" id="current-part">Выберите область тела</h2>
             <div id="body-visualization">
                 <div class="empty-state">
@@ -759,7 +795,7 @@
     </main>
 
     <footer class="footer">
-        <p>Медицинская система визуализации © 2024</p>
+        <p>Марик лох!</p>
     </footer>
 </div>
 
