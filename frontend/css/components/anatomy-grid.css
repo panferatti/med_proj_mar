@@ -1,0 +1,37 @@
+.dark-theme .sidebar {
+    background: rgba(30, 30, 30, 0.95);
+    color: white;
+}
+
+.dark-theme .breadcrumb {
+    background: rgba(50, 50, 50, 0.8);
+    color: white;
+}
+
+.dark-theme .body-part {
+    background: rgba(50, 50, 50, 0.95);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+
+
+.dark-theme .body-part:hover {
+    color: #8e2de2;
+}
+
+/* Адаптивность для anatomy grid */
+@media (max-width: 768px) {
+    .anatomy-grid {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+        gap: 0.75rem;
+    }
+
+    .body-part {
+        padding: 1rem 0.5rem;
+    }
+
+    .body-part-icon {
+        font-size: 2rem;
+    }
+}

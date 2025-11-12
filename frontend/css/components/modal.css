@@ -1,0 +1,120 @@
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.active {
+    display: flex;
+}
+
+.dark-theme .modal-content {
+    background: rgba(30, 30, 30, 0.95);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+}
+
+.modal-header h3 {
+    color: #333;
+    font-weight: 500;
+}
+
+.dark-theme .modal-header h3 {
+    color: white;
+}
+
+.notes-list {
+    max-height: 300px;
+    overflow-y: auto;
+    margin-bottom: 1.5rem;
+}
+
+.dark-theme .note-item {
+    background: rgba(50, 50, 50, 0.8);
+    color: white;
+}
+
+.note-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 0.5rem;
+}
+
+.note-doctor {
+    font-weight: 600;
+    color: #333;
+}
+
+.dark-theme .note-doctor {
+    color: white;
+}
+
+.note-date {
+    color: #666;
+    font-size: 0.85rem;
+}
+
+.dark-theme .note-date {
+    color: #ccc;
+}
+
+.note-content {
+    color: #555;
+    line-height: 1.4;
+}
+
+.dark-theme .note-content {
+    color: #ddd;
+}
+
+.form-group {
+    margin-bottom: 1rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #333;
+    font-weight: 500;
+}
+
+.dark-theme .form-group label {
+    color: white;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.75rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s ease;
+    background: rgba(255, 255, 255, 0.9);
+}
+
+.dark-theme .form-control {
+    background: rgba(50, 50, 50, 0.9);
+    border: 1px solid #555;
+    color: white;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: #667eea;
+}
